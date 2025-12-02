@@ -1,4 +1,5 @@
 # Constantes o variables para configurar el sistema
 
-PORT = 'COM3'
-BAUD = 115200
+constantes = type("C", (), {})()
+PORT = 'COM4'
+BAUD = 9600

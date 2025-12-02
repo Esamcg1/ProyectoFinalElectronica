@@ -1,13 +1,11 @@
 import serial
 import time
-import random
 from constants import constantes
 
-USE_SIMULATION = True   # Modo similarioc
+USE_SIMULATION = False
 ser = None
 
 def conectar_arduino():
-    """Conecta al puerto real"""
     global ser
     while True:
         try:
@@ -21,24 +19,40 @@ def conectar_arduino():
 
 
 def leer_serial():
-    """Lee datos reales o simula valores"""
-
+    """
+    Lee una línea del Arduino.
+        TEMP:24.5
+        HUM:60
+        LDR:350
+        DAYNIGHT:DAY
+        DOOR:OPEN
+        MOTION:1
+        ---
+    """
     global ser
 
-    # Si es simulacion
     if USE_SIMULATION:
+        # Generar datos falsos
+        import random
         time.sleep(0.5)
 
-        temp = round(random.uniform(20, 30), 1)
-        hum = round(random.uniform(40, 80), 1)
-        ldr = random.randint(0, 1023)
-        puerta = random.choice(["Abriendo puerta", "Cerrando puerta"])
-        dia_noche = "DIA" if ldr > 400 else "NOCHE"
+        temp = round(random.uniform(20,30),1)
+        hum = round(random.uniform(40,80),1)
+        ldr = random.randint(0,1023)
+        day = "DAY" if ldr > 500 else "NIGHT"
+        door = random.choice(["OPEN","CLOSED"])
 
-        simulated = f"T:{temp} H:{hum} {dia_noche} {puerta}"
-        return simulated
+        return [
+            f"TEMP:{temp}",
+            f"HUM:{hum}",
+            f"LDR:{ldr}",
+            f"DAYNIGHT:{day}",
+            f"DOOR:{door}",
+            "MOTION:0",
+            "---"
+        ]
 
-    # Usar el arduino serial 
+    # Lectura real
     if ser is None:
         conectar_arduino()
 
