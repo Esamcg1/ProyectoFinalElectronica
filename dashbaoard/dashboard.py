@@ -3,12 +3,12 @@ from tkinter import ttk
 import threading
 import time
 from collections import deque
-
 from constants import constantes
 from dashboard_render import leer_serial, conectar_arduino
-
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from assistant_webhook import estado
+
 
 # ---------- configuraciones generales para la interfaz ----------
 root = tk.Tk()
@@ -102,6 +102,7 @@ def apply_packet(packet):
             if y < 10: y = 10
             if y > 190: y = 190
             canvas_temp.coords(termometro_barra, 20, y, 40, 190)
+            estado["temperatura"] = t
             temps.append(t)
         except:
             pass
@@ -115,6 +116,7 @@ def apply_packet(packet):
             if ancho < 0: ancho = 0
             if ancho > 200: ancho = 200
             canvas_hum.coords(hum_barra, 0, 0, ancho, 30)
+            estado['humedad'] = h
             hums.append(h)
         except:
             pass
@@ -132,10 +134,12 @@ def apply_packet(packet):
         v = packet["DAYNIGHT"].strip().upper()
         if v in ("NIGHT","NOCHE"):
             lbl_dia.config(text="Día/Noche: NOCHE")
-            lbl_icono.config(text="🌙")
+            lbl_icono.config(text="🌝")
+            estado["dia_noche"] = "noche"
         else:
             lbl_dia.config(text="Día/Noche: DIA")
-            lbl_icono.config(text="🌞")
+            lbl_icono.config(text="☀️")
+            estado["dia_noche"] = 'dia'
 
     # door
     if "DOOR" in packet:
@@ -144,9 +148,11 @@ def apply_packet(packet):
             lbl_puerta.config(text="Puerta: ABIERTA")
             # mover rect (abrir hacia la izquierda)
             canvas_puerta.coords(puerta_rect, 10, 10, 50, 190)
+            estado['puerta'] = 'abierta'
         else:
             lbl_puerta.config(text="Puerta: CERRADA")
             canvas_puerta.coords(puerta_rect, 10, 10, 90, 190)
+            estado["puerta"] = 'cerrada'
 
     # motion -> we can briefly log it
     if "MOTION" in packet:
