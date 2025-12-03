@@ -10,8 +10,8 @@ from matplotlib.figure import Figure
 from assistant_webhook import estado
 
 
-# ---------- configuraciones generales para la interfaz ----------
-root = tk.Tk()
+# --------- configuraciones generales para la interfaz ----------
+root = tk.-Tk()
 root.title("Dashboard Arduino")
 root.geometry("1000x640")
 root.configure(bg="#e6f2ff")
@@ -134,11 +134,11 @@ def apply_packet(packet):
         v = packet["DAYNIGHT"].strip().upper()
         if v in ("NIGHT","NOCHE"):
             lbl_dia.config(text="Día/Noche: NOCHE")
-            lbl_icono.config(text="🌝")
+            lbl_icono.config(text="🌝") # emoji lo saque de wahs app
             estado["dia_noche"] = "noche"
         else:
             lbl_dia.config(text="Día/Noche: DIA")
-            lbl_icono.config(text="☀️")
+            lbl_icono.config(text="☀️") # emoji sacado de whatsapp
             estado["dia_noche"] = 'dia'
 
     # door

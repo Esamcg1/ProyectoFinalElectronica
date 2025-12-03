@@ -2,4 +2,4 @@
 
 constantes = type("C", (), {})()
 PORT = 'COM4'
-BAUD = 9600
+BAUD = 115200

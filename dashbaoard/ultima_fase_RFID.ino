@@ -256,5 +256,24 @@ void loop() {
   if (puertaAbierta) lcd.print("P:OPEN ");
   else lcd.print("P:CLOSE");
 
+  // ----- ENVÍO DE DATOS A DASHBOARD / GOOGLE -----
+  Serial.print("TEMP:");
+  Serial.println(t);
+
+  Serial.print("HUM:");
+  Serial.println(h);
+
+  Serial.print("LDR:");
+  Serial.println(valorLDR);
+
+  Serial.print("DAYNIGHT:");
+  Serial.println(esNoche ? "NIGHT" : "DAY");
+
+  Serial.print("DOOR:");
+  Serial.println(puertaAbierta ? "OPEN" : "CLOSED");
+
+  // Separador de paquete
+  Serial.println("---");
+
   delay(250);
 }
